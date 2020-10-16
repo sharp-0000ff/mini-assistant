@@ -5,37 +5,65 @@ DATABASE = {
     'Дима': 'Челябинск',
     'Алина': 'Красноярск',
     'Егор': 'Пермь',
-    'Коля': 'Красноярск'
+    'Коля': 'Красноярск',
+    'Антон': 'Минск',
 }
 
 
 def format_count_friends(friends_count):
     if friends_count == 1:
-        return 'У тебя 1 друг'
+        return '1 друг'
     elif 2 <= friends_count <= 4:
-        return 'У тебя ' + str(friends_count) + ' друга'
+        return f'{friends_count} друга'
     elif friends_count >= 5:
-        return 'У тебя ' + str(friends_count) + ' друзей'
+        return f'{friends_count} друзей'
+
+
+def process_anfisa(query):
+    if query == 'сколько у меня друзей?':
+        count_string = format_count_friends(len(DATABASE))
+        return f'У тебя {count_string}'
+    elif query == 'кто все мои друзья?':
+        friends_string = ', '.join(DATABASE.keys())
+        return f'Твои друзья: {friends_string}'
+    elif query == 'где живут все мои друзья?':
+        unique_cities = set(DATABASE.values())
+        cities_string = ', '.join(unique_cities)
+        return f'Твои друзья живут в городах: {cities_string}'
+    else:
+        return '<Неизвестный запрос>'
+
+
+def process_friend(name, query):
+    if name in DATABASE:
+        if query == 'ты где?':
+            return f'{name} в городе {DATABASE[name]}'
+        else:
+            return '<Неизвестный запрос>'
+    else:
+        return f'У тебя нету друга по имени {name}'
 
 
 def process_query(query):
-    if query == 'Сколько у меня друзей?':
-        count = len(DATABASE)
-        return format_count_friends(count)
-    elif query == 'Кто все мои друзья?':
-        friends_string = ', '.join(DATABASE)
-        return 'Твои друзья: ' + friends_string
-    elif query == 'Где все мои друзья?':
-        return 'Твои друзья в городах: {}'.format(', '.join(set(DATABASE.values())))
+    temp = query.split(', ')
+    if temp[0] == 'Анфиса':
+        return process_anfisa(temp[1])
     else:
-        return '<неизвестный запрос>'
+        return process_friend(temp[0], temp[1])
 
 
 def runner():
-    print('Привет, я Анфиса!')
-    print(process_query('Сколько у меня друзей?'))
-    print(process_query('Кто все мои друзья?'))
-    print(process_query('Где все мои друзья?'))
+    queries = [
+        'Анфиса, сколько у меня друзей?',
+        'Анфиса, кто все мои друзья?',
+        'Анфиса, где живут все мои друзья?',
+        'Анфиса, кто виноват?',
+        'Коля, ты где?',
+        'Соня, что делать?',
+        'Антон, ты где?',
+    ]
+    for query in queries:
+        print(f'{query} - {process_query(query)}')
 
 
 runner()
