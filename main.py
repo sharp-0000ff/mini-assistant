@@ -1,23 +1,41 @@
-FRIENDS = ['Серёга', 'Соня', 'Дима', 'Алина', 'Егор']
+DATABASE = {
+    'Серёга': 'Омск',
+    'Соня': 'Москва',
+    'Миша': 'Москва',
+    'Дима': 'Челябинск',
+    'Алина': 'Красноярск',
+    'Егор': 'Пермь',
+    'Коля': 'Красноярск'
+}
 
-def print_friends_count(friends_count):
+
+def format_count_friends(friends_count):
     if friends_count == 1:
-        print('У тебя 1 друг')
+        return 'У тебя 1 друг'
     elif 2 <= friends_count <= 4:
-        print('У тебя ' + str(friends_count) + ' друга')
+        return 'У тебя ' + str(friends_count) + ' друга'
     elif friends_count >= 5:
-        print('У тебя ' + str(friends_count) + ' друзей')
+        return 'У тебя ' + str(friends_count) + ' друзей'
+
 
 def process_query(query):
-    print("Привет, я Анфиса!")
-    if query == 'Сколько у меня друзей?':   
-        count = len(FRIENDS)
-        print_friends_count(count)
+    if query == 'Сколько у меня друзей?':
+        count = len(DATABASE)
+        return format_count_friends(count)
     elif query == 'Кто все мои друзья?':
-        print('Твои друзья: {}'.format(', '.join(FRIENDS)))
+        friends_string = ', '.join(DATABASE)
+        return 'Твои друзья: ' + friends_string
+    elif query == 'Где все мои друзья?':
+        return 'Твои друзья в городах: {}'.format(', '.join(set(DATABASE.values())))
     else:
-        print('<неизвестный запрос>')
+        return '<неизвестный запрос>'
 
-process_query('Сколько у меня друзей?')
-process_query('Кто все мои друзья?')
-process_query('Как меня зовут?')
+
+def runner():
+    print('Привет, я Анфиса!')
+    print(process_query('Сколько у меня друзей?'))
+    print(process_query('Кто все мои друзья?'))
+    print(process_query('Где все мои друзья?'))
+
+
+runner()
